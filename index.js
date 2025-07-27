@@ -70,95 +70,103 @@ app.get("/products/category/:category", async (req, res) => {
 
 app.post("/seed-products", async (req, res) => {
   try {
-    const products = [
+    const sampleProducts = [
       {
         name: "iPhone 14 Pro",
         price: 1299,
         description: "Apple's flagship phone with A16 Bionic chip.",
-        imageUrl: "https://example.com/images/iphone14pro.jpg",
+        imageUrl: "https://source.unsplash.com/featured/?iphone,smartphone",
         category: "smartphones",
       },
       {
         name: "Samsung Galaxy S23 Ultra",
         price: 1199,
         description: "High-end Android phone with 200MP camera.",
-        imageUrl: "https://example.com/images/galaxys23ultra.jpg",
+        imageUrl: "https://source.unsplash.com/featured/?samsung,smartphone",
         category: "smartphones",
       },
       {
         name: "MacBook Pro 16-inch",
         price: 2399,
         description: "Powerful laptop with M2 Pro chip.",
-        imageUrl: "https://example.com/images/macbookpro16.jpg",
-        category: "laptops",
-      },
-      {
-        name: "Dell XPS 15",
-        price: 1899,
-        description: "Premium Windows laptop with OLED display.",
-        imageUrl: "https://example.com/images/dellxps15.jpg",
+        imageUrl: "https://source.unsplash.com/featured/?macbook,laptop",
         category: "laptops",
       },
       {
         name: "Sony WH-1000XM5",
         price: 399,
         description: "Industry-leading noise cancelling headphones.",
-        imageUrl: "https://example.com/images/sonywh1000xm5.jpg",
-        category: "electronics",
+        imageUrl: "https://source.unsplash.com/featured/?headphones,sony",
+        category: "accessories",
       },
       {
         name: "iPad Pro 12.9",
         price: 1099,
         description: "Large, powerful tablet with M2 chip.",
-        imageUrl: "https://example.com/images/ipadpro12.jpg",
-        category: "electronics",
+        imageUrl: "https://source.unsplash.com/featured/?ipad,tablet",
+        category: "tablets",
       },
       {
         name: "Apple Watch Ultra",
         price: 799,
         description: "Durable smartwatch for extreme sports.",
-        imageUrl: "https://example.com/images/applewatchultra.jpg",
-        category: "electronics",
+        imageUrl: "https://source.unsplash.com/featured/?applewatch,wearable",
+        category: "accessories",
       },
       {
         name: "Google Pixel 7",
         price: 599,
         description: "Google’s flagship phone with Tensor G2 chip.",
-        imageUrl: "https://example.com/images/pixel7.jpg",
+        imageUrl: "https://source.unsplash.com/featured/?pixel,smartphone",
         category: "smartphones",
+      },
+      {
+        name: "Dell XPS 15",
+        price: 1899,
+        description: "Premium Windows laptop with OLED display.",
+        imageUrl: "https://source.unsplash.com/featured/?dell,laptop",
+        category: "laptops",
       },
       {
         name: "Bose QuietComfort Earbuds II",
         price: 299,
         description: "Premium noise-cancelling earbuds.",
-        imageUrl: "https://example.com/images/boseqc2.jpg",
-        category: "electronics",
+        imageUrl: "https://source.unsplash.com/featured/?earbuds,bose",
+        category: "accessories",
       },
       {
         name: "Logitech MX Master 3S",
         price: 99,
         description: "Advanced productivity mouse with silent clicks.",
-        imageUrl: "https://example.com/images/mxmaster3s.jpg",
-        category: "electronics",
+        imageUrl: "https://source.unsplash.com/featured/?mouse,logitech",
+        category: "accessories",
       },
     ];
 
-    await Product.deleteMany();
-    await Product.insertMany(products);
-    res.status(201).json({
-      success: true,
-      message: "Seeded 10 products into the database.",
-      count: products.length,
-    });
+    // Generate 40 more variations
+    const extraProducts = [];
+    const categories = ["smartphones", "laptops", "electronics", "accessories", "tablets"];
+    for (let i = 1; i <= 40; i++) {
+      const category = categories[i % categories.length];
+      extraProducts.push({
+        name: `Product ${i}`,
+        price: Math.floor(Math.random() * 1000) + 100,
+        description: `Description for Product ${i}`,
+        imageUrl: `https://source.unsplash.com/featured/?${category},tech,${i}`,
+        category,
+      });
+    }
+
+    await Product.deleteMany(); 
+    await Product.insertMany([...sampleProducts, ...extraProducts]);
+
+    res.status(201).json({ message: "50 products seeded successfully" });
   } catch (err) {
-    console.error("Seeding error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Failed to seed products",
-      error: err.message,
-    });
+    console.error(err);
+    res.status(500).json({ error: "Failed to seed products" });
   }
 });
+
 
 const MONGO_URI =
   "mongodb+srv://habeebabdulsalam86:sJDlWEc7Nmhr7ixu@cluster0.i7jailt.mongodb.net/ecommerce";
