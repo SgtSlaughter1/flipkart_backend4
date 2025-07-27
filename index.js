@@ -143,7 +143,7 @@ app.post("/seed-products", async (req, res) => {
       },
     ];
 
-    await Product.deleteMany(); // optional: clean before seeding
+    await Product.deleteMany();
     await Product.insertMany(products);
     res.status(201).json({
       success: true,
@@ -159,8 +159,6 @@ app.post("/seed-products", async (req, res) => {
     });
   }
 });
-
-// ✅ Connect and start server only if DB is live
 
 const MONGO_URI =
   "mongodb+srv://habeebabdulsalam86:sJDlWEc7Nmhr7ixu@cluster0.i7jailt.mongodb.net/ecommerce";
