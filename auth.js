@@ -34,6 +34,19 @@ router.post("/auth/login", async (req, res) => {
   }
 });
 
+// Get user profile route
+router.get("/auth/profile", authenticateJWT, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("-password");
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ user });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 // JWT middleware
 function authenticateJWT(req, res, next) {
   const authHeader = req.headers.authorization;
