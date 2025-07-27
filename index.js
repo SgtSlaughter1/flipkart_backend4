@@ -129,11 +129,12 @@ app.post("/seed-products", async (req, res) => {
 });
 
 // ✅ Connect and start server only if DB is live
+
+const MONGO_URI =
+  "mongodb+srv://habeebabdulsalam86:sJDlWEc7Nmhr7ixu@cluster0.i7jailt.mongodb.net/ecommerce";
+
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(MONGO_URI)
   .then(() => {
     console.log("✅ Connected to MongoDB Atlas");
     app.listen(8080, () => {
